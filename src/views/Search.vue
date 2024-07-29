@@ -90,8 +90,8 @@ watchEffect(async () => {
     <section v-else-if="paginatedOutfits.length" class="grow mt-20 mb-12" id="top">
         <ul
             class="flex flex-col gap-10 justify-center items-center md:grid md:grid-cols-3 md:gap-y-12 mx-auto md:w-[85%]">
-            <li v-for="({ imageUrls, name, price }) in paginatedOutfits">
-                <Card :name="name" :image-url="imageUrls[0]" :price="price" :link="`/categories/:id/items`" />
+            <li v-for="({ imageUrls, name, price, category, id }) in paginatedOutfits">
+                <Card :name="name" :image-url="imageUrls[0]" :price="price" :link="`/categories/${category}/items?id=${id}`" />
             </li>
 
         </ul>
