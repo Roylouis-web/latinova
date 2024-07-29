@@ -119,11 +119,7 @@ const edit = async () => {
     if (!editMode.value) {
         editMode.value = true;
     }
-    else if (formState.value.files.length === 0) {
-        successMessage.value = '';
-        errorMessage.value = 'Choose at least one image';
-        clear(errorMessage);
-    } else if (!formState.value.name) {
+    else if (!formState.value.name) {
         successMessage.value = '';
         errorMessage.value = 'Product name can not be empty';
         clear(errorMessage);
@@ -140,23 +136,32 @@ const edit = async () => {
         errorMessage.value = 'Please select a tag';
         clear(errorMessage);
     } else {
-        for (const file of formState.value.payloadUrls) {
-            await deleteObject(firebaseRef(storage, file));
-        }
+        if (formState.value.files.length) {
+            for (const file of formState.value.payloadUrls) {
+                await deleteObject(firebaseRef(storage, file));
+            }
 
-        for (const file of formState.value.files) {
-            const storageRef = firebaseRef(storage, `images/${file.name}`);
-            const snapShot = await uploadBytes(storageRef, file);
-            imageUrls.push(snapShot.ref.fullPath);
-        }
+            for (const file of formState.value.files) {
+                const storageRef = firebaseRef(storage, `images/${file.name}`);
+                const snapShot = await uploadBytes(storageRef, file);
+                imageUrls.push(snapShot.ref.fullPath);
+            }
 
-        await updateDoc(doc(db, 'outfits', id as string), {
-            name: formState.value.name,
-            price: formState.value.price,
-            category: formState.value.category,
-            tags: formState.value.tags,
-            imageUrls
-        });
+            await updateDoc(doc(db, 'outfits', id as string), {
+                name: formState.value.name,
+                price: formState.value.price,
+                category: formState.value.category,
+                tags: formState.value.tags,
+                imageUrls
+            });
+        } else {
+            await updateDoc(doc(db, 'outfits', id as string), {
+                name: formState.value.name,
+                price: formState.value.price,
+                category: formState.value.category,
+                tags: formState.value.tags,
+            });
+        }
 
         successMessage.value = 'Product successfully updated';
     }

@@ -50,19 +50,17 @@ watchEffect(() => {
     <section v-if="outfits.length" class="mt-24 grow">
         <article class="pt-4 mb-16 lg:pl-12" v-for="({name, data }) in outfits">
             <h1 class="font-bold text-xl md:text-4xl mb-10 bg-black text-white p-3  w-11/12 mx-auto">{{ name }}</h1>
-            <section v-for="{ imageUrls, price, category } in data">
                 <Carousel
              :items-to-show="show" :autoplay="3000" :wrap-around="true">
-                <Slide v-for="imageUrl in imageUrls" :key="imageUrl">
+                <Slide v-for="d in data" :key="d.id">
                     <Card 
-                    :name="name" 
-                    :imageUrl="imageUrl"
-                    :price="price" 
-                    :link="`best_selling/${category}`"
+                    :name="d.name" 
+                    :imageUrl="d.imageUrls[0]"
+                    :price="d.price" 
+                    :link="`categories/${d.category}`"
                     class="m-4"/>
                 </Slide>
             </Carousel>
-            </section>
         </article>
     </section>
     <p v-else-if="!loading && !outfits.length"

@@ -132,10 +132,22 @@ const nextBtn = async () => {
 }
 
 const deleteProduct = async (id: string) => {
+    temp.value = [];
     const docRef = doc(db, 'outfits', id);
     const docRef2 = query(collection(db, 'wishlist'), where('product.id', '==', 'id'));
+    const docRef3 = query(collection(db, 'carts'), where('product.id', '==', 'id'));
 
-    const carts = await getDocs(docRef2);
+    const wishlist = await getDocs(docRef2);
+    if (!wishlist.empty) {
+        wishlist.forEach(async (wish) => {
+            if (wish.data().product.id === id) {
+                const wishDocRef = doc(db, 'wishlist', wish.id);
+                await deleteDoc(wishDocRef);
+            }
+        });
+    }
+
+    const carts = await getDocs(docRef3);
     if (!carts.empty) {
         carts.forEach(async (cart) => {
             if (cart.data().product.id === id) {
@@ -146,12 +158,8 @@ const deleteProduct = async (id: string) => {
     }
 
     await deleteDoc(docRef);
-    querySnapshot.value.forEach((outfit) => {
-        if (outfit.id !== id) {
-            temp.value.push({ id: outfit.id, ...outfit.data() } as Outfit);
-        }
-    });
-    outfits.value = temp.value;
+   
+    outfits.value = outfits.value.filter((outfit) => outfit.id !== id);
 }
 
 const show = (id: string) => {

@@ -49,14 +49,16 @@ const fetchData = async (next: boolean, prev: boolean) => {
             index.value -= 10;
         }
     } else {
-        const docRef = query(collection(db, 'outfits'));
+        data.value = [];
+        outfits.value = [];
+        const docRef = collection(db, 'outfits');
         querySnapshot.value = await getDocs(docRef);
+
         if (!querySnapshot.value.empty) {
             querySnapshot.value.forEach((outfit) => {
-                if (!data.value.length) {
-                    data.value.push({ id: outfit.id, ...outfit.data() } as Outfit)
-                }
+                data.value.push({ id: outfit.id, ...outfit.data() } as Outfit);
             });
+
             outfits.value = data.value.filter((outfit) => outfit.name.includes(search.value));
             paginatedOutfits.value = outfits.value.slice(0, 10);
 
@@ -67,7 +69,7 @@ const fetchData = async (next: boolean, prev: boolean) => {
             }
         }
     }
-    
+
     loading.value = false;
 }
 
@@ -91,7 +93,8 @@ watchEffect(async () => {
         <ul
             class="flex flex-col gap-10 justify-center items-center md:grid md:grid-cols-3 md:gap-y-12 mx-auto md:w-[85%]">
             <li v-for="({ imageUrls, name, price, category, id }) in paginatedOutfits">
-                <Card :name="name" :image-url="imageUrls[0]" :price="price" :link="`/categories/${category}/items?id=${id}`" />
+                <Card :name="name" :image-url="imageUrls[0]" :price="price"
+                    :link="`/categories/${category}/items?id=${id}`" />
             </li>
 
         </ul>
@@ -102,8 +105,7 @@ watchEffect(async () => {
                 :disabled="trackNext === 0 ? true : false">Next</button>
         </aside>
     </section>
-    <p v-else
-        class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
+    <p v-else class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
         No product found!
     </p>
 </template>
