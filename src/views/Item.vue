@@ -30,6 +30,7 @@ watchEffect(async () => {
         const res = await getDoc(doc(db, 'carts', update as string));
         state.value = res.data() as Cart;
         state.value.id = res.id;
+        downloadedUrls.value = state.value.product?.imageUrls as string [];
     } else {
         const res = await getDoc(doc(db, 'outfits', id as string));
         state.value = {
