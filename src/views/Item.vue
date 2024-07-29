@@ -163,7 +163,7 @@ const decrease = () => {
         <section class="mb-24 mt-20">
             <section class="mx-auto md:w-[500px] w-[300px] font-bold mb-12 text-[16px] md:text-2xl">
                 <h1>SIZE CHART</h1>
-                <p>It is very important to view our price chart before placing an order</p>
+                <p>It is very important to view our size chart before placing an order</p>
             </section>
             <img src="/WhatsApp Image 2024-03-01 at 12.09.35.jpeg" alt="size chart"
                 class="h-[300px] w-[300px] md:w-[500px] md:h-[500px] mx-auto mb-12">

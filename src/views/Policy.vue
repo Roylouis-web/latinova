@@ -15,7 +15,7 @@
             <h1 class="mb-10 font-bold">Exchange Policy</h1>
             <p>
                 <b>OUR EXCHANGE POLICY</b>
-                Inter-state <b>EXCHANGE</b> takes 3 days from the day the day our customer received their products.
+                Inter-state <b>EXCHANGE</b> takes 3 days from the day our customer received their products.
                 Same state take within a day to exchange a product.
                 We are working on changing our policies as soon as we have the capability to do so. Thanks for your
                 understanding.</p>
