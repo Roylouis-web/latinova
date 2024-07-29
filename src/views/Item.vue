@@ -25,12 +25,11 @@ watchEffect(async () => {
     if (!payload.value.id) {
         router.push('/login');
     }
-    
+
     if (update) {
         const res = await getDoc(doc(db, 'carts', update as string));
         state.value = res.data() as Cart;
         state.value.id = res.id;
-        downloadedUrls.value = state.value.product?.imageUrls as string[];
     } else {
         const res = await getDoc(doc(db, 'outfits', id as string));
         state.value = {
@@ -45,12 +44,12 @@ watchEffect(async () => {
             product: { id: res.id, ...res.data() } as Outfit,
             client: payload.value
         }
+    }
 
-        if (state.value.product?.imageUrls) {
-            for (const imageUrl of state.value.product.imageUrls) {
-                const storageRef = firebaseRef(storage, imageUrl);
-                downloadedUrls.value.push(await getDownloadURL(storageRef));
-            }
+    if (state.value.product?.imageUrls) {
+        for (const imageUrl of state.value.product.imageUrls) {
+            const storageRef = firebaseRef(storage, imageUrl);
+            downloadedUrls.value.push(await getDownloadURL(storageRef));
         }
     }
 });
