@@ -7,10 +7,6 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { payload } from '@/lib/helper';
 import Spinner from '@/components/Spinner.vue';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 type FormState = {
     name: string,
     price: number,
@@ -65,18 +61,22 @@ onMounted(() => {
 });
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+
     const res = await getDoc(doc(db, 'outfits', id as string));
-    
+
     const { name, imageUrls, price, category, tags } = res.data() as FormState
     const initialImageUrls = [];
 
     for (const imageUrl of imageUrls) {
-                const storageRef = firebaseRef(storage, imageUrl);
-                initialImageUrls.push(await getDownloadURL(storageRef));
-            } 
+        const storageRef = firebaseRef(storage, imageUrl);
+        initialImageUrls.push(await getDownloadURL(storageRef));
+    }
 
     formState.value = {
-        name, imageUrls: initialImageUrls, payloadUrls: [], price, category, tags, initialImageUrls, files: [] 
+        name, imageUrls: initialImageUrls, payloadUrls: [], price, category, tags, initialImageUrls, files: []
     }
 })
 
@@ -88,12 +88,12 @@ const clear = (handler: Ref<string>) => {
 
 const handleImageUrl = (event: Event) => {
     const input = event.target as any as HTMLInputElement;
-    
+
     if (formState.value.initialImageUrls.length) {
         formState.value.initialImageUrls = [];
         formState.value.imageUrls = [];
     }
-    
+
     if (input.files && input.files.length > 0) {
         if (formState.value.files.length < 4 && input.files.length <= 4) {
             for (let file of input.files) {
@@ -170,8 +170,10 @@ const edit = async () => {
         @submit.prevent>
         <label
             :class="`border-black border-dotted border-x-2 border-y-2 ${formState.imageUrls.length ? 'h-96 w-80 md:h-96 md:w-80' : 'h-60 w-60'} md:h-96 md:w-80 justify-center items-center p-10 ${!editMode && 'border-slate-600'} ${formState.imageUrls.length > 0 && 'border-none'} ${formState.imageUrls.length ? 'grid grid-cols-2 p-16 pt-0' : 'flex flex-col'}`">
-            <input :disabled="editMode === false" @change="handleImageUrl" type="file" hidden multiple name="outfit" id="outfit">
-            <img v-if="formState.imageUrls.length" v-for="imageUrl in formState.imageUrls" :src="imageUrl" alt="choosen outfit"
+            <input :disabled="editMode === false" @change="handleImageUrl" type="file" hidden multiple name="outfit"
+                id="outfit">
+            <img v-if="formState.imageUrls.length" v-for="imageUrl in formState.imageUrls" :src="imageUrl"
+                alt="choosen outfit"
                 :class="`${!editMode && 'opacity-80'} ${formState.imageUrls.length === 2 ? 'h-52 w-52' : 'h-full w-full'} object-cover`">
             <p v-if="formState.imageUrls.length === 0 && formState.initialImageUrls.length === 0"
                 :class="`md:text-xl flex justify-center items-center h-full ${!editMode && 'text-slate-600'}`">Select

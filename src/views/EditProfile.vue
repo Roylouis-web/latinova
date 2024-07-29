@@ -5,10 +5,6 @@ import { payload } from '@/lib/helper';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/init';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const disabled = ref(true);
 
 const formState = ref({
@@ -28,6 +24,10 @@ const addressRegex = /^\w+(\s|,|\w)+$/;
 const emailRegex = /^([A-Z]|[0-9]|\.|-)([A-Z]|[0-9]|\.|-)+@(gmail|hotmail|yahoo)\.com$/i;
 
 watchEffect(() => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     if (!formState.value.telephone && !formState.value.firstName && !formState.value.lastName && !formState.value.email) {
         disabled.value = true;
         formState.value = {

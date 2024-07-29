@@ -21,16 +21,16 @@ const addressRegex = /^\w+(\s|,|\w)+$/;
 const state = ref<Partial<Cart>>();
 const downloadedUrls = ref([] as string[]);
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     if (update) {
         const res = await getDoc(doc(db, 'carts', update as string));
         state.value = res.data() as Cart;
         state.value.id = res.id;
-        downloadedUrls.value = state.value.product?.imageUrls as string [];
+        downloadedUrls.value = state.value.product?.imageUrls as string[];
     } else {
         const res = await getDoc(doc(db, 'outfits', id as string));
         state.value = {
@@ -63,11 +63,11 @@ const checkDetails = () => {
         height,
         deliveryType
     } = state.value as {
-            bust: string,
-            waist: string,
-            hips: string,
-            height: string,
-            deliveryType: string,
+        bust: string,
+        waist: string,
+        hips: string,
+        height: string,
+        deliveryType: string,
     };
 
     if (!bust || !waist || !hips || !height || !deliveryType) {
@@ -144,8 +144,7 @@ const decrease = () => {
     <section v-if="state" class="grow pt-10 lg:pt-0 mb-12 lg:pl-12 lg:flex lg:gap-16 md:gap-10">
         <section>
             <Carousel :items-to-show="1" :autoplay="3000" :wrap-around="true">
-                <Slide v-for="imageUrl in downloadedUrls"
-                :key="uuid4()">
+                <Slide v-for="imageUrl in downloadedUrls" :key="uuid4()">
                     <section>
                         <img :src="imageUrl" alt="slide"
                             class="h-[300px] w-[300px] md:w-[500px] md:h-[500px] md:mt-20" />

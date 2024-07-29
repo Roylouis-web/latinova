@@ -52,9 +52,9 @@ const memeTypes = [
     'image/webp'
 ];
 
-// if (!payload.value.id) {
-//     router.push('/login');
-// }
+if (!payload.value.id) {
+    router.push('/login');
+}
 
 onMounted(() => {
     input.value.focus();

@@ -7,10 +7,6 @@ import { payload } from '@/lib/helper';
 import router from '@/router';
 import { collection, deleteDoc, doc, getDocs, where, query, orderBy, limit, startAfter, endBefore, type QuerySnapshot, type DocumentData, and, limitToLast, updateDoc } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const orders = ref([] as Order[]);
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
 const temp = ref<Cart[]>([] as Cart[]);
@@ -111,6 +107,10 @@ const fetchData = async (next: boolean, prev: boolean) => {
 }
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     await fetchData(false, false);
 });
 

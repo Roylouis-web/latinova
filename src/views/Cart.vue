@@ -7,10 +7,6 @@ import { deleteDoc, getDocs, collection, query, where, doc, type QuerySnapshot, 
 import router from '@/router';
 import { cartItemsCount, payload } from '@/lib/helper';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const carts = ref<Cart[]>([] as Cart[]);
 let total = ref(0);
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
@@ -20,6 +16,10 @@ const errorMessage = ref('');
 const addressRegex = /^\w+(\s|,|\w)+$/;
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+
     if (payload.value.id) {
         const docRef = query(collection(db, 'carts'), where('client.id', '==', payload.value.id))
         querySnapshot.value = await getDocs(docRef);

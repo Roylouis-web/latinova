@@ -7,16 +7,16 @@ import { orderCount, payload } from '@/lib/helper';
 import router from '@/router';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const order = ref({} as Order);
 const { id } = router.currentRoute.value.query;
 const loading = ref(true);
 const delivered = ref(false);
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     const docRef = doc(db, 'orders', id as string);
     const data = await getDoc(docRef);
     order.value = { id: data.id, ...data.data() } as unknown as Order;

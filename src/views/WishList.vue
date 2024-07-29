@@ -7,10 +7,6 @@ import { payload } from '@/lib/helper';
 import router from '@/router';
 import { collection, deleteDoc, doc, getDocs, where, orderBy, query, startAfter, endBefore, limit, limitToLast, type QuerySnapshot, type DocumentData } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const wishlist = ref<WishList[]>([] as WishList[]);
 const temp = [] as WishList[];
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
@@ -114,6 +110,10 @@ const fetchData = async (next: boolean, prev: boolean) => {
 }
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+
     await fetchData(false, false);
 });
 

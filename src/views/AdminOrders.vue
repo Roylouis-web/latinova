@@ -7,10 +7,6 @@ import { payload } from '@/lib/helper';
 import router from '@/router';
 import { collection, deleteDoc, doc, getDocs, query, orderBy, type QuerySnapshot, type DocumentData, where, startAfter, endBefore, limit, limitToLast, updateDoc } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const orders = ref([] as Order[]);
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
 const temp = ref<Cart[]>([] as Cart[]);
@@ -46,7 +42,6 @@ const prevStatus = async () => {
 }
 
 const fetchData = async (next: boolean, prev: boolean) => {
-    const temp = [] as Order[];
     loading.value = true;
 
     if (next) {
@@ -105,6 +100,10 @@ const fetchData = async (next: boolean, prev: boolean) => {
 }
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     await fetchData(false, false);
 });
 
@@ -203,8 +202,7 @@ const hide = (id: string) => {
                 :disabled="trackNext === 0 ? true : false">Next</button>
         </aside>
     </section>
-    <p v-else
-        class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
+    <p v-else class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
         No orders yet !
     </p>
 </template>

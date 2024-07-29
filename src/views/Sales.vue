@@ -7,10 +7,6 @@ import { payload } from '@/lib/helper';
 import router from '@/router';
 import { collection, getDocs, where, orderBy, query, type QuerySnapshot, type DocumentData, startAfter, endBefore, limit, limitToLast } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const sales = ref<Order[]>([] as Order[]);
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
 const loading = ref(true);
@@ -109,6 +105,10 @@ const fetchData = async (next: boolean, prev: boolean) => {
 }
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     await fetchData(false, false);
 });
 

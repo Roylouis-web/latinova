@@ -8,10 +8,6 @@ import { db } from '@/firebase/init';
 import { payload } from '@/lib/helper';
 import { collection, getDocs, deleteDoc, doc, limit, orderBy, query, type QuerySnapshot, type DocumentData, startAfter, endBefore, where, limitToLast } from 'firebase/firestore';
 
-if (!payload.value.id) {
-    router.push('/login');
-}
-
 const outfits = ref<Outfit[]>([] as Outfit[]);
 const search = ref('');
 const querySnapshot = ref({} as QuerySnapshot<DocumentData, DocumentData>);
@@ -39,10 +35,10 @@ const nextStatus = async () => {
 const prevStatus = async () => {
     const querySnapshot2 = ref({} as QuerySnapshot<DocumentData, DocumentData>);
     const first = querySnapshot.value.docs[0];
-    
+
     const docRef = query(collection(db, 'outfits'), orderBy('timestamp', 'desc'), endBefore(first), limitToLast(10));
     querySnapshot2.value = await getDocs(docRef);
-    
+
     if (!querySnapshot2.value.empty) {
         return true;
     }
@@ -60,7 +56,7 @@ const fetchData = async (next: boolean, prev: boolean) => {
             querySnapshot.value.forEach((outfit) => {
                 temp.push({ id: outfit.id, ...outfit.data() } as Outfit);
             });
- 
+
             outfits.value = temp
             const checkNext = await nextStatus();
 
@@ -120,6 +116,10 @@ const fetchData = async (next: boolean, prev: boolean) => {
 }
 
 watchEffect(async () => {
+    if (!payload.value.id) {
+        router.push('/login');
+    }
+    
     await fetchData(false, false);
 });
 
@@ -133,7 +133,7 @@ const nextBtn = async () => {
 
 const deleteProduct = async (id: string) => {
     const docRef = doc(db, 'outfits', id);
-    const docRef2 = query(collection(db, 'wishlist'), where('product.id', '==' ,'id'));
+    const docRef2 = query(collection(db, 'wishlist'), where('product.id', '==', 'id'));
 
     const carts = await getDocs(docRef2);
     if (!carts.empty) {
@@ -213,8 +213,7 @@ const hide = (id: string) => {
                 :disabled="trackNext === 0 ? true : false">Next</button>
         </aside>
     </section>
-    <p v-else
-        class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
+    <p v-else class="text-2xl md:text-4xl justify-center items-center grow p-20 md:p-48 flex">
         No products yet !
     </p>
 </template>
