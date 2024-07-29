@@ -9,7 +9,7 @@ import Spinner from './components/Spinner.vue';
 </script>
 
 <template>
-    <!-- <Loader /> -->
+    <Loader />
     <NavBar />
     <SideBar />
     <RouterView />
