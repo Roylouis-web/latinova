@@ -10,7 +10,7 @@ if (!payload.value.id) {
 
 const deleteAccount = () => {
     deleteDoc(doc(db, 'users', payload.value.id));
-
+    payload.value = {} as Client;
     router.push('/');
 }
 
