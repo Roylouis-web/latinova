@@ -25,7 +25,8 @@ watchEffect(async () => {
 
 const deliveredBtn = async () => {
     await updateDoc(doc(db, 'orders', id as string), {
-        status: 'delivered'
+        status: 'delivered',
+        deliveredAt: new Date()
     });
 
     if (orderCount.value > 0) {

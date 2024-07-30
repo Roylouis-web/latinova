@@ -32,21 +32,26 @@ watchEffect(async () => {
         state.value.id = res.id;
     } else {
         const res = await getDoc(doc(db, 'outfits', id as string));
-        state.value = {
-            bust: '',
-            waist: '',
-            hips: '',
-            height: '',
-            additionalInfo: '',
-            colour: '',
-            size: '',
-            quantity: 1,
-            product: { id: res.id, ...res.data() } as Outfit,
-            client: payload.value
+
+        if (!res.exists()) {
+            router.push('/');
+        } else {
+            state.value = {
+                bust: '',
+                waist: '',
+                hips: '',
+                height: '',
+                additionalInfo: '',
+                colour: '',
+                size: '',
+                quantity: 1,
+                product: { id: res.id, ...res.data() } as Outfit,
+                client: payload.value
+            }
         }
     }
 
-    if (state.value.product?.imageUrls) {
+    if (state.value?.product?.imageUrls) {
         for (const imageUrl of state.value.product.imageUrls) {
             const storageRef = firebaseRef(storage, imageUrl);
             downloadedUrls.value.push(await getDownloadURL(storageRef));
@@ -60,16 +65,15 @@ const checkDetails = () => {
         waist,
         hips,
         height,
-        deliveryType
+
     } = state.value as {
         bust: string,
         waist: string,
         hips: string,
         height: string,
-        deliveryType: string,
     };
 
-    if (!bust || !waist || !hips || !height || !deliveryType) {
+    if (!bust || !waist || !hips || !height) {
         return false;
     }
 

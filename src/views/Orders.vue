@@ -3,7 +3,7 @@ import { onMounted, ref, watchEffect } from 'vue';
 import Card from '@/components/Card.vue';
 import Spinner from '@/components/Spinner.vue';
 import { db } from '@/firebase/init';
-import { payload } from '@/lib/helper';
+import { orderCount, payload } from '@/lib/helper';
 import router from '@/router';
 import { collection, deleteDoc, doc, getDocs, where, query, orderBy, limit, startAfter, endBefore, type QuerySnapshot, type DocumentData, and, limitToLast, updateDoc } from 'firebase/firestore';
 
@@ -129,6 +129,9 @@ const cancelOrder = async (id: string, productId: string) => {
             const docRef = doc(db, 'orders', order.id);
             await deleteDoc(docRef);
             orders.value = orders.value.filter((o) => o.id !== id);
+            if (orderCount.value > 0) {
+                orderCount.value -= 1;
+            }
         } else {
             orders.value.map(order => {
                 order.product = order.product.filter(product => {
