@@ -36,6 +36,7 @@ const formState: Ref<FormState & {
     files: []
 });
 
+const status = ref(false);
 const editMode = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
@@ -136,6 +137,8 @@ const edit = async () => {
         errorMessage.value = 'Please select a tag';
         clear(errorMessage);
     } else {
+        status.value = true;
+
         if (formState.value.files.length) {
             for (const file of formState.value.payloadUrls) {
                 await deleteObject(firebaseRef(storage, file));
@@ -162,8 +165,9 @@ const edit = async () => {
                 tags: formState.value.tags,
             });
         }
-
+        status.value = false;
         successMessage.value = 'Product successfully updated';
+        clear(successMessage);
     }
 }
 
@@ -212,8 +216,9 @@ const edit = async () => {
             :class="`text-center text-xl md:text-2xl ${successMessage ? 'text-green-600' : 'text-red-600'}`">{{
                 successMessage || errorMessage }}</p>
         <button type="button" @click="edit"
-            :class="`flex justify-center rounded-xl text-white bg-[#BB8E51] w-4/5 md:w-1/2 mx-auto p-3 text-xl md:text-4xl hover:opacity-90`">{{
-                editMode ? 'Upload Outfit' : 'Edit Outfit' }}</button>
+        :disabled="status ? true : undefined"
+            :class="`flex justify-center rounded-xl text-white bg-[#BB8E51] w-4/5 md:w-1/2 mx-auto p-3 text-xl md:text-4xl hover:opacity-90 ${status ? 'opacity-95' : ''}`">{{
+                editMode ? 'Upload Outfit' : status ? 'Uploading...' : 'Edit Outfit' }}</button>
     </form>
     <Spinner v-else />
 </template>

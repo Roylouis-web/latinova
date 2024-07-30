@@ -61,6 +61,14 @@ const logout = () => {
                     </li>
                 </RouterLink>
             </section>
+            <section v-else>
+                <RouterLink to="/delete_account">
+                    <li
+                        class="mb-8 hover:bg-[#BB8E51] hover:text-white hover:scale-105 transition-all duration-300 p-6 border-[1px] border-black rounded-xl">
+                        Delete Account
+                    </li>
+                </RouterLink>
+            </section>
             <li @click="logout"
                 class="mb-8 hover:bg-[#BB8E51] hover:text-white hover:scale-105 transition-all duration-300 p-6 border-[1px] border-black rounded-xl">
                 Log Out

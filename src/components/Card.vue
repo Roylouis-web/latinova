@@ -57,7 +57,7 @@ const changeBGColor = async (event: MouseEvent) => {
     <section
         :class="`flex flex-col gap-2 md:text-2xl text-xl shadow-black shadow hover:scale-110 transition-all duration-300 pb-2 w-[200px] md:w-[300px] scale-105`">
         <span class="flex justify-end">
-            <Fa v-if="productId" :icon="faHeart" role="button" :class="`text-3xl md:text-4xl p-2 transition-all ${wishList && 'text-[#BB8E51]'}`"
+            <Fa v-if="productId" :icon="payload.role !== 'admin' && faHeart" role="button" :class="`text-3xl md:text-4xl p-2 transition-all ${wishList && 'text-[#BB8E51]'}`"
                 @click="(event: MouseEvent) => changeBGColor(event)" />
         </span>
         <RouterLink :to="link">

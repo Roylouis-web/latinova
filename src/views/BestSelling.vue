@@ -57,7 +57,7 @@ watchEffect(() => {
                     :name="d.name" 
                     :imageUrl="d.imageUrls[0]"
                     :price="d.price" 
-                    :link="`categories/${d.category}`"
+                    :link="`/best_selling/${d.category}`"
                     class="m-4"/>
                 </Slide>
             </Carousel>

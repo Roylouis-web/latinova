@@ -109,9 +109,9 @@ const fetchData = async (next: boolean, prev: boolean) => {
 watchEffect(async () => {
     if (!payload.value.id) {
         router.push('/login');
+    } else {
+        await fetchData(false, false);
     }
-    
-    await fetchData(false, false);
 });
 
 const prevBtn = async () => {

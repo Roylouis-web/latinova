@@ -149,6 +149,11 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       component: () => import('@/views/404.vue')
     },
+    {
+      name: 'delete_account',
+      path: '/delete_account',
+      component: () => import('@/views/DeleteAccount.vue')
+    }
   ],
   scrollBehavior () {
     return { top: 0 }
